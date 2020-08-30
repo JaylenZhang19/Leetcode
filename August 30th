@@ -1,5 +1,4 @@
 1276. Number of Burgers with No Waste of Ingredients
-
 class Solution:
     def numOfBurgers(self, tomatoSlices: int, cheeseSlices: int) -> List[int]:  
         if (tomatoSlices - 2 * cheeseSlices) % 2 == 1:
@@ -10,3 +9,88 @@ class Solution:
             return [(tomatoSlices - 2 * cheeseSlices) // 2, cheeseSlices - (tomatoSlices - 2 * cheeseSlices) // 2]
             
             
+            
+            
+775. Global and Local Inversions
+class Solution:
+    def isIdealPermutation(self, A: List[int]) -> bool:
+        n = len(A)
+        maximum = A[0]
+        for i in range(n):
+            maximum = max(maximum, A[i])
+            if i + 2 < n and A[i + 2] < maximum:
+                return False
+        return True
+        
+        
+        
+        
+695. Max Area of Island
+class Solution:
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        ans = 0
+        row = len(grid)
+        column = len(grid[0])
+
+        def bfs(x, y):
+            if grid[x][y] == 0:
+                return
+            count = 0
+            grid[x][y] = 0
+            queue = [(x, y)]
+            while queue:
+                x, y = queue.pop(0)
+                count += 1
+                
+                for x_, y_ in [[0, 1], [0, -1], [1, 0], [-1, 0]]:
+                    new_x, new_y = x + x_, y + y_
+                    if 0 <= new_x < row and 0 <= new_y < column and grid[new_x][new_y] == 1:
+                        grid[new_x][new_y] = 0
+                        queue.append((new_x, new_y))
+            nonlocal ans
+            ans = max(ans, count)
+
+        for i in range(row):
+            for j in range(column):
+                bfs(i, j)
+        return ans
+        
+        
+        
+        
+1512. Number of Good Pairs
+class Solution:
+    def numIdenticalPairs(self, nums: List[int]) -> int:
+        counter = collections.Counter(nums)
+        ret = 0
+        for v in counter.values():
+            if v >= 2:
+                amount = v * (v - 1) // 2
+                ret += amount
+        return ret
+        
+        
+        
+        
+908. Smallest Range I
+class Solution:
+    def smallestRangeI(self, A: List[int], K: int) -> int:
+        return max(0, max(A) - min(A) - 2 * K)
+        
+        
+        
+        
+        
+        
+910. Smallest Range II
+class Solution:
+    def smallestRangeII(self, A: List[int], K: int) -> int:
+        A.sort()
+        n = len(A)
+        minimum, maximum = A[0], A[-1]
+        ans = maximum - minimum
+        for i in range(n - 1):
+            upper = max(A[i] + K, maximum - K)
+            lower = min(A[i + 1] - K, minimum + K)
+            ans = min(ans, upper - lower)
+        return ans
