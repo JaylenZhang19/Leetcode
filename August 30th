@@ -1,0 +1,12 @@
+1276. Number of Burgers with No Waste of Ingredients
+
+class Solution:
+    def numOfBurgers(self, tomatoSlices: int, cheeseSlices: int) -> List[int]:  
+        if (tomatoSlices - 2 * cheeseSlices) % 2 == 1:
+            return []
+        elif (tomatoSlices - 2 * cheeseSlices) // 2 < 0 or cheeseSlices - (tomatoSlices - 2 * cheeseSlices) // 2< 0:
+            return [] 
+        else:
+            return [(tomatoSlices - 2 * cheeseSlices) // 2, cheeseSlices - (tomatoSlices - 2 * cheeseSlices) // 2]
+            
+            
