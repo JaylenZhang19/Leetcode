@@ -8,38 +8,39 @@ class Node:
 """
 
 class Solution:
-    def __init__(self):
-        self.v = {}
-        
     def copyRandomList(self, head: 'Node') -> 'Node':
-        if not head:
-            return None
-        if head in self.v:
-            return self.v[head]
-        node = Node(head.val)
-        self.v[head] = node
-        node.next = self.copyRandomList(head.next)
-        node.random = self.copyRandomList(head.random)
-        return node
-    
-    def get_colone(self, node):
-        if not node:
-            return None
-        if node in self.v:
-            return self.v[node]
-        else:
-            self.v[node] = Node(node.val)
-            return self.v[node]
         
-    def copyRandomList(self, head):
+        seen = {} 
+        def helper(head):
+            if not head:
+                return None
+            if head in seen:
+                return seen[head]
+            root = Node(head.val)
+            seen[head] = root
+            root.random = helper(head.random)
+            root.next = helper(head.next)
+            return root
+        return helper(head)
+    
+    
+    def copyRandomList(self, head: 'Node') -> 'Node':
+        seen = {} 
         if not head:
-            return head
+            return None
+        def helper(node):
+            if not node:
+                return None
+            if node in seen:
+                return seen[node]
+            seen[node] = Node(node.val)
+            return seen[node]
+        
+        
         current = head
         while current:
-            colone = self.get_colone(current)
-            colone.next = self.get_colone(current.next)
-            colone.random = self.get_colone(current.random)
+            clone = helper(current)
+            clone.next = helper(current.next)
+            clone.random = helper(current.random)
             current = current.next
-        return self.v[head]
-    
-    
+        return seen[head]
