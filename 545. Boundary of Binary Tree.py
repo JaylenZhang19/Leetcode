@@ -6,45 +6,47 @@
 #         self.right = right
 class Solution:
     def boundaryOfBinaryTree(self, root: TreeNode) -> List[int]:
-        res = []
         if not root:
-            return res
-        res.append(root.val)
+            return []
+        ret = []
         if not root.left and not root.right:
-            return res
-        # adding left boundary
-        t = root.left
-        while t:
-            if t.left or t.right:
-                res.append(t.val)
-            if t.left:
-                t = t.left
+            return [root.val]
+        ret.append(root.val)
+        current = root.left
+        while current:
+            if not current.left and not current.right:
+                break
+            ret.append(current.val)   
+            if current.left:
+                current = current.left
             else:
-                t = t.right
-                
-        # adding leaf
-        def helper(root):
-            if root:
-                if not root.left and not root.right:
-                    res.append(root.val)
-                if root.left:
-                    helper(root.left)
-                if root.right:
-                    helper(root.right)
-        helper(root)
+                current = current.right
         
-        # adding right boundary bottom-up
+        # add leaves
+        current = root
         stack = []
-        t = root.right
-        while t:
-            if t.left or t.right:
-                stack.append(t.val)
-            if t.right:
-                t = t.right
+        while current or stack:
+            while current:
+                stack.append(current)
+                current = current.left
+            current = stack.pop()
+            if not current.left and not current.right:
+                ret.append(current.val)
+            current = current.right
+        # visit right
+        stack = []
+        current = root.right
+        while current:
+            if current.left or current.right:
+                stack.append(current.val)
+                if current.right:
+                    current = current.right
+                else:
+                    current = current.left
             else:
-                t = t.left
+                break
         while stack:
-            res.append(stack.pop())
-        return res
-        
+            ret.append(stack.pop())
+        return ret
+            
         
